@@ -1,3 +1,4 @@
+//HW28 part 1
 import LoginPage from '../../tests/page_objects/pages/login.page'
 import InventoryPage from '../../tests/page_objects/pages/inventory.page'
 
