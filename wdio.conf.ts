@@ -125,7 +125,13 @@ export const config: WebdriverIO.Config = {
     // Test reporter for stdout.
     // The only one supported by default is 'dot'
     // see also: https://webdriver.io/docs/dot-reporter
-    reporters: ['spec'],
+    reporters: ['spec',
+         ['allure', {
+      outputDir: 'allure-results',
+      disableWebdriverStepsReporting: true,
+      disableWebdriverScreenshotsReporting: false,
+    }]
+    ],
 
     // Options to be passed to Mocha.
     // See the full list at http://mochajs.org/
@@ -143,6 +149,8 @@ export const config: WebdriverIO.Config = {
     // methods to it. If one of them returns with a promise, WebdriverIO will wait until that promise got
     // resolved to continue.
     /**
+     * 
+     * 
      * Gets executed once before all workers get launched.
      * @param {object} config wdio configuration object
      * @param {Array.<Object>} capabilities list of capabilities details
@@ -216,8 +224,12 @@ export const config: WebdriverIO.Config = {
      * Hook that gets executed _after_ a hook within the suite starts (e.g. runs after calling
      * afterEach in Mocha)
      */
-    // afterHook: function (test, context, { error, result, duration, passed, retries }, hookName) {
-    // },
+    afterTest: async function (test, context, { error, result, duration, passed, retries }) {
+        if (error) {
+            // делает скриншот при падении теста
+            await browser.takeScreenshot();
+        }
+    },
     /**
      * Function to be executed after a test (in Mocha/Jasmine only)
      * @param {object}  test             test object
